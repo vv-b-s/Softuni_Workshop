@@ -9,6 +9,6 @@ namespace Forum.Models
     /// </summary>
     public abstract class Model
     {
-        public Model(params string[] args) { }
+        public Model(params string[] args) { } 
     }
 }
