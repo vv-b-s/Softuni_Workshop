@@ -21,7 +21,7 @@ namespace Forum.App.Services
             if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
                 return false;
 
-            var forumData = new ForumData();
+            var forumData = ForumData.GetInstance();
 
             bool userExists = forumData.Users.Any(u => u.Username == username && u.Password == password);
 
@@ -36,7 +36,7 @@ namespace Forum.App.Services
             if (!validUsername || !validPassword)
                 return SignUpStatus.DetailsError;
 
-            var forumData = new ForumData();
+            var forumData = ForumData.GetInstance();
 
             bool userAlreadyExists = forumData.Users.Any(u => u.Username == username && u.Password == password);
 
@@ -52,6 +52,18 @@ namespace Forum.App.Services
             }
 
             return SignUpStatus.UsernameTakenError;
+        }
+
+        internal static User GetUser(int userId)
+        {
+            var user = ForumData.GetInstance().Users.Find(u => u.Id == userId);
+            return user;
+        }
+
+        internal static User GetUser(string username)
+        {
+            var user = ForumData.GetInstance().Users.Find(u => u.Username == username);
+            return user;
         }
     }
 }

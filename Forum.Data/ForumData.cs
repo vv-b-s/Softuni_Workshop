@@ -5,11 +5,16 @@ using System.Text;
 
 namespace Forum.Data
 {
-    public class ForumData
+    /**
+     * Yet another singleton class. There is only one forum data instance needed
+     */
+    public class ForumData :IDisposable
     {
-        public ForumData()
+        private static ForumData instance;
+
+        private ForumData()
         {
-            DataMapper.GetDataMapper();
+            DataMapper.GetInstance();
 
             this.Users = DataMapper.LoadModels<User>();
             this.Categories = DataMapper.LoadModels<Category>();
@@ -22,6 +27,30 @@ namespace Forum.Data
         public List<Post> Posts { get; set; }
         public List<Reply> Replies { get; set; }
 
+        public static ForumData GetInstance()
+        {
+            if (instance is null)
+                instance = new ForumData();
+
+            return instance;
+        }
+
+        ~ForumData()
+        {
+            this.Dispose();
+        }
+
+        public void Dispose()
+        {
+            this.SaveChanges();
+
+            this.Categories = null;
+            this.Users = null;
+            this.Posts = null;
+            this.Replies = null;
+            instance = null;
+        }
+
         public void SaveChanges()
         {
             DataMapper.SaveChanges(this.Users);
@@ -29,6 +58,5 @@ namespace Forum.Data
             DataMapper.SaveChanges(this.Replies);
             DataMapper.SaveChanges(this.Posts);
         }
-
     }
 }

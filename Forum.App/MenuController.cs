@@ -5,6 +5,7 @@
     using System.Linq;
     using Forum.App.Controllers;
     using Forum.App.Controllers.Contracts;
+    using Forum.App.Services;
     using Forum.App.UserInterface;
     using Forum.App.UserInterface.Contracts;
 
@@ -103,31 +104,41 @@
                 case MenuState.PostAdded:
                     AddPost();
                     break;
+
                 case MenuState.OpenCategory:
                     OpenCategory();
                     break;
+
                 case MenuState.ViewPost:
                     ViewPost();
                     break;
+
                 case MenuState.SuccessfulLogIn:
                     SuccessfulLogin();
                     break;
+
                 case MenuState.LoggedOut:
                     LogOut();
                     break;
+
                 case MenuState.Back:
                     this.Back();
                     break;
-				case MenuState.Error:
+
+                case MenuState.Error:
+
                 case MenuState.Rerender:
                     RenderCurrentView();
                     break;
+
                 case MenuState.AddReplyToPost:
                     RedirectToAddReply();
                     break;
+
                 case MenuState.ReplyAdded:
                     AddReply();
                     break;
+
                 default:
                     this.RedirectToMenu(newState);
                     break;
@@ -136,12 +147,30 @@
 
         private void AddReply()
         {
-            throw new NotImplementedException();
+            var addReplyController = this.CurrentController as AddReplyController;
+
+            var postId = addReplyController.Post.PostId;
+
+            var postViewer = this.controllers[(int)MenuState.ViewPost] as PostDetailsController;
+            postViewer.SetPostId(postId);
+
+            addReplyController.ResetReply();
+
+            this.RedirectToMenu(MenuState.ViewPost);
         }
 
         private void RedirectToAddReply()
         {
-            throw new NotImplementedException();
+            //Get the post id from the current controller
+            var postDetailsController = this.CurrentController as PostDetailsController;
+            var postId = postDetailsController.PostId;
+
+            //Send the post Id to the reply controller
+            var replyController = this.controllers[(int)MenuState.AddReply] as AddReplyController;
+            replyController.SetPost(postId);
+
+            //Redirect to the reply form vire
+            this.RedirectToMenu(MenuState.AddReply);
         }
 
         private void LogOut()
@@ -161,17 +190,47 @@
 
         private void ViewPost()
         {
-            throw new NotImplementedException();
+            var categoryController = this.CurrentController as CategoryController;
+
+            var categoryId = categoryController.CategoryId;
+
+            var posts = PostService.GetPostsByCategory(categoryId).ToArray();
+
+            var postIndex = categoryController.CurrentPage * CategoriesController.PAGE_OFFSET + this.currentOptionIndex;
+            var postId = posts[postIndex - 1].Id;
+
+            var postController = this.controllers[(int)MenuState.ViewPost] as PostDetailsController;
+            postController.SetPostId(postId);
+
+            this.RedirectToMenu(MenuState.ViewPost);
         }
 
         private void OpenCategory()
         {
-            throw new NotImplementedException();
+            var categoriesController = this.CurrentController as CategoriesController;
+
+            int categoryIndex = categoriesController.CurrentPage * CategoriesController.PAGE_OFFSET + this.currentOptionIndex;
+
+            var categoryCtrl = this.controllers[(int)MenuState.OpenCategory] as CategoryController;
+            categoryCtrl.SetCategory(categoryIndex);
+
+            this.RedirectToMenu(MenuState.OpenCategory);
         }
 
         private void AddPost()
         {
-            throw new NotImplementedException();
+            var addPostController = this.CurrentController as AddPostController;
+
+            var postId = addPostController.Post.PostId;
+
+            var postViewer = this.controllers[(int)MenuState.ViewPost] as PostDetailsController;
+            postViewer.SetPostId(postId);
+
+            addPostController.ResetPost();
+
+            this.controllerHistory.Pop();
+
+            this.RedirectToMenu(MenuState.ViewPost);
         }
 
         private void RenderCurrentView()

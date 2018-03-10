@@ -103,7 +103,7 @@ namespace Forum.Data
             WriteLines(config[configKey], lines.ToArray());
         }
 
-        public static DataMapper GetDataMapper()
+        public static DataMapper GetInstance()
         {
             if (instance is null)
                 instance = new DataMapper();

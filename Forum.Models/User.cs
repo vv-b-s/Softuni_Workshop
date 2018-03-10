@@ -34,11 +34,11 @@ namespace Forum.Models
         public int Id { get; set; }
         public string Username { get; set; }
         public string Password { get; set; }
-        public ICollection<int> PostIds { get; set; }
+        public IList<int> Posts { get; set; }
 
         public override string ToString()
         {
-            var output = $"{this.Id};{this.Username};{this.Password};{string.Join(',', this.PostIds)}";
+            var output = $"{this.Id};{this.Username};{this.Password};{string.Join(',', this.Posts)}";
             return output;
         }
 
@@ -54,7 +54,7 @@ namespace Forum.Models
             this.Id = id;
             this.Username = username;
             this.Password = password;
-            this.PostIds = posts;
+            this.Posts = posts.ToList();
         }
     }
 }

@@ -38,7 +38,7 @@ namespace Forum.Models
         public string Content { get; set; }
         public int CategoryId { get; set; }
         public int AuthorId { get; set; }
-        public ICollection<int> ReplyIds { get; set; }
+        public IList<int> ReplyIds { get; set; }
 
         public override string ToString()
         {
@@ -62,7 +62,7 @@ namespace Forum.Models
             this.Content = content;
             this.CategoryId = categoryId;
             this.AuthorId = authorId;
-            this.ReplyIds = replyIds;
+            this.ReplyIds = replyIds.ToList();
         }
     }
 }

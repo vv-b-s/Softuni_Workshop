@@ -31,11 +31,11 @@ namespace Forum.Models
 
         public int Id { get; set; }
         public string Name { get; set; }
-        public ICollection<int> PostIds { get; set; }
+        public IList<int> Posts { get; set; }
 
         public override string ToString()
         {
-            var outout = $"{this.Id};{this.Name};{string.Join(',', this.PostIds)}";
+            var outout = $"{this.Id};{this.Name};{string.Join(',', this.Posts)}";
             return outout;
         }
 
@@ -49,7 +49,7 @@ namespace Forum.Models
         {
             this.Id = id;
             this.Name = name;
-            this.PostIds = posts;
+            this.Posts = posts.ToList();
         }
     }
 }
