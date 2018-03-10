@@ -15,13 +15,18 @@ namespace Forum.Models
             var categoryId = int.Parse(args[3]);
             var authorId = int.Parse(args[4]);
 
-            var replyIds = args[5]
-                .Split(',', StringSplitOptions.RemoveEmptyEntries)
-                .Select(int.Parse)
-                .ToArray();
+            var replyIds = new int[0];
+
+            if (args.Length > 5)
+                replyIds = args[5]
+                    .Split(',', StringSplitOptions.RemoveEmptyEntries)
+                    .Select(int.Parse)
+                    .ToArray();
 
             BindData(id, title, content, categoryId, authorId, replyIds);
         }
+
+        public Post(int id, string title, string content, int categoryId, int authorId) : this(id, title, content, categoryId, authorId, new int[0]) { }
 
         public Post(int id, string title, string content, int categoryId, int authorId, ICollection<int> replyIds)
         {

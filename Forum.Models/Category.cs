@@ -11,13 +11,18 @@ namespace Forum.Models
             var id = int.Parse(args[0]);
             var name = args[1];
 
-            var postIds = args[2]
-                .Split(',', StringSplitOptions.RemoveEmptyEntries)
-                .Select(int.Parse)
-                .ToArray();
+            var postIds = new int[0];
+
+            if (args.Length > 2)
+                postIds = args[2]
+                    .Split(',', StringSplitOptions.RemoveEmptyEntries)
+                    .Select(int.Parse)
+                    .ToArray();
 
             BindData(id, name, postIds);
         }
+
+        public Category(int id, string name) : this(id, name, new int[0]) { }
 
         public Category(int id, string name, ICollection<int> posts)
         {

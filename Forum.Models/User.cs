@@ -13,13 +13,18 @@ namespace Forum.Models
             var username = args[1];
             var password = args[2];
 
-            var posts = args[3]
-                .Split(',', StringSplitOptions.RemoveEmptyEntries)
-                .Select(int.Parse)
-                .ToArray();
+            var posts = new int[0];
+
+            if (args.Length > 3)
+                posts = args[3]
+                    .Split(',', StringSplitOptions.RemoveEmptyEntries)
+                    .Select(int.Parse)
+                    .ToArray();
 
             BindData(id,username,password,posts);
         }
+
+        public User(int id, string username, string password) : this(id, username, password, new int[0]) { }
 
         public User(int id, string username, string password, ICollection<int> posts)
         {

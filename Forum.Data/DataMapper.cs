@@ -12,8 +12,8 @@ namespace Forum.Data
 {
     public class DataMapper
     {
-        private const string DataPath = "../data/";
-        private const string ConfigPath = "config.ini";
+        private const string DATA_PATH = "../data/";
+        private const string CONFIG_PATH = "config.ini";
 
         private static DataMapper instance;
 
@@ -24,8 +24,8 @@ namespace Forum.Data
 
         private DataMapper()
         {
-            Directory.CreateDirectory(DataPath);
-            config = LoadConfig(DataPath + ConfigPath);
+            Directory.CreateDirectory(DATA_PATH);
+            config = LoadConfig(DATA_PATH + CONFIG_PATH);
         }
 
         private static void EnsureConfigFile(string configPath)
@@ -53,7 +53,7 @@ namespace Forum.Data
 
             var config = contents
                 .Select(l => l.Split('='))
-                .ToDictionary(t => t[0], t => DataPath + t[1]);
+                .ToDictionary(t => t[0], t => DATA_PATH + t[1]);
 
             return config;      
         }
@@ -89,7 +89,7 @@ namespace Forum.Data
             return models;
         }
 
-        public static void SaveChanges<TModel>(List<TModel> models)
+        public static void SaveChanges<TModel>(List<TModel> models) where TModel : Model
         {
             var configKey = typeof(TModel).Name.ToLower();
             var lines = new List<string>();
