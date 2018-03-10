@@ -156,6 +156,10 @@
 
             addReplyController.ResetReply();
 
+            //Popping the stack twice, to get back to the ViewPost page. Note that it would work without popping but it will cause problems on that page when pressing 'back'
+            this.controllerHistory.Pop();
+            this.controllerHistory.Pop();
+
             this.RedirectToMenu(MenuState.ViewPost);
         }
 

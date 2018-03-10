@@ -24,7 +24,7 @@
             ResetReply();
         }
 
-        private enum Command { Write, Submit }
+        private enum Command { Write, Submit, Back }
 
         public PostViewModel Post { get; private set; }
 
@@ -63,6 +63,10 @@
                     }
 
                     return MenuState.ReplyAdded;
+
+                case Command.Back:
+                    return MenuState.Back;
+
             }
 
             throw new InvalidCommandException();
