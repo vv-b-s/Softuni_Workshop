@@ -5,16 +5,16 @@ using Forum.App.Contracts;
 
 namespace Forum.App.Models.Commands.MenuCommands
 {
-    public class ViewCategoryCommand : MenuCommand
+    public class ViewPostMenuCommand : MenuCommand
     {
-        public ViewCategoryCommand(IMenuFactory menuFactory) : base(menuFactory) { }
+        public ViewPostMenuCommand(IMenuFactory menuFactory) : base(menuFactory) { }
 
         public override IMenu Execute(params string[] args)
         {
-            var categoryId = int.Parse(args[0]);
+            var postId = int.Parse(args[0]);
 
             var menu = base.Execute(args) as IIdHoldingMenu;
-            menu.SetId(categoryId);
+            menu.SetId(postId);
 
             return menu;
         }

@@ -15,7 +15,7 @@
 		public static void Main(string[] args)
 		{
             var serviceProvider = ConfigureServices();
-            var menu = serviceProvider.GetService<MenuController>();
+            var menu = serviceProvider.GetService<IMainController>();
 
 			Engine engine = new Engine(menu);
 			engine.Run();

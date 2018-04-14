@@ -14,6 +14,8 @@ namespace Forum.App.Models.Commands.MenuCommands
             this.menuFactory = menuFactory;
         }
 
+        protected IMenuFactory MenuFactory => this.menuFactory;
+
         public virtual IMenu Execute(params string[] args)
         {
             var menuName = GetMenuName();

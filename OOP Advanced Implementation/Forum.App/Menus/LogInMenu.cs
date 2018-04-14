@@ -2,6 +2,7 @@
 {
 	using Models;
     using Contracts;
+    using System;
 
     public class LogInMenu : Menu
     {
@@ -9,13 +10,25 @@
 
 		private bool error;
 
-		private ILabelFactory labelFactory;
+        private ILabelFactory labelFactory;
+        private ICommandFactory commandFactory;
+        private IForumReader forumReader;
 
-		//TODO: Inject Dependencies
-		
-		private string UsernameInput => this.Buttons[0].Text.TrimStart();
+        public LogInMenu(ILabelFactory labelFactory, ICommandFactory commandFactory, IForumReader forumReader)
+        {
+            this.labelFactory = labelFactory;
+            this.forumReader = forumReader;
+            this.commandFactory = commandFactory;
+
+            Open();
+        }
+
+
+        private string UsernameInput => this.Buttons[0].Text.TrimStart();
 
 		private string PasswordInput => this.Buttons[1].Text.TrimStart();
+
+        private string ErrorMessage { get; set; }
 
 		protected override void InitializeStaticLabels(Position consoleCenter)
         {
@@ -65,7 +78,31 @@
 
 		public override IMenu ExecuteCommand()
 		{
-			throw new System.NotImplementedException();
-		}
+            if (this.CurrentOption.IsField)
+            {
+                var fieldInput = " " + this.forumReader.ReadLine(this.CurrentOption.Position.Left + 1, this.CurrentOption.Position.Top);
+
+                this.Buttons[this.currentIndex] = this.labelFactory.CreateButton(fieldInput, this.CurrentOption.Position, this.CurrentOption.IsHidden, this.CurrentOption.IsField);
+
+                return this;
+            }
+
+            try
+            {
+                var commandName = string.Join("", this.CurrentOption.Text.Split());
+                var command = this.commandFactory.CreateCommand(commandName);
+                var view = command.Execute(this.UsernameInput, this.PasswordInput);
+
+                return view;
+            }
+            catch (Exception e)
+            {
+                this.error = true;
+                this.ErrorMessage = e.Message;
+                this.Open();
+
+                return this;
+            }
+        }
 	}
 }

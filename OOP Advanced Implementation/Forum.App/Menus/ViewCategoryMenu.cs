@@ -25,8 +25,6 @@
             this.labelFactory = labelFactory;
             this.postService = postService;
             this.commandFactory = command;
-
-            this.Open();
         }
 
         private int LastPage => this.posts.Length / 11;

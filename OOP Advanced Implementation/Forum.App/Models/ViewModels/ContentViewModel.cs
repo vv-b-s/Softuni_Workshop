@@ -22,7 +22,7 @@ namespace Forum.App.Models.ViewModels
 
             var lines = new List<string>();
 
-            for (int i = 0; i < content.Length; i++)
+            for (int i = 0; i < content.Length; i+=LineLength)
             {
                 var row = contentChars.Skip(i).Take(LineLength).ToArray();
                 var rowString = new string(row);

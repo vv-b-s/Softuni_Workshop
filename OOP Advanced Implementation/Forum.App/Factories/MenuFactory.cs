@@ -18,9 +18,12 @@ namespace Forum.App.Factories
 
         public IMenu CreateMenu(string menuName)
         {
+            if (!menuName.EndsWith("Menu"))
+                menuName += "Menu";
+
             var assembly = Assembly.GetExecutingAssembly();
             var menuType = assembly.GetTypes()
-               .FirstOrDefault(t => t.Name == menuName + "Menu");
+               .FirstOrDefault(t => t.Name == menuName);
 
             if(!typeof(IMenu).IsAssignableFrom(menuType))
                 throw new InvalidOperationException($"{menuType} is not a command");
